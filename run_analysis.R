@@ -19,14 +19,13 @@ run_calc <- function(directory) {
 }
 
 
-run_analysis <- function(directory) {
+run_analysis <- function(directory=getwd()) {
   ## 'directory' is a character vector of length 1 indicating
-  ## the location of the CSV files
+  ## the location of the Samsung data files
+  ## the directory must be the "UCI HAR Dataset" directory
   
   
   if (file.exists(directory)){
-    
-    ##myactivity_labels<- read.csv("activity_labels.txt")
     
     test_folder <- paste(directory,"/test/Inertial Signals/",sep="")
     train_folder<- paste(directory,"/train/Inertial Signals/",sep="")
@@ -34,12 +33,13 @@ run_analysis <- function(directory) {
     mytestfiles<-list.files(test_folder,pattern="*.txt")
     mytrainfiles<-list.files(train_folder,pattern="*.txt")
     
+    #########################
+    ## Working on test files
+    #########################
+    
     mypath <- paste(test_folder,mytestfiles[1],sep="")
     mytestdata<-read.csv(mypath)    
     mydata <- matrix(nrow=nrow(mytestdata),ncol=length(mytestfiles)+1)
-    ##names(mydata)<-substring(mytestfiles, 1,nchar(mytestfiles)-4)
-    
-    ##print(dim(mydata))
     
     i<-1
     
@@ -59,24 +59,23 @@ run_analysis <- function(directory) {
       
       
       i<-i+1
-      ##if (i==2) break
     }
     
-    ##print(mynames)
-    ##print(dim(mydata))
-    
+  
     mydata[,ncol(mydata)]<-rep("test",nrow(mydata)) 
     
     mynames <- c(mynames,"test_or_train")
     colnames(mydata)<-mynames
     
-    ##print(colnames(mydata))
-    
+  
     outputtest <- paste(directory,"/data_bind.txt",sep="")  
     write.table(mydata,outputtest,append=TRUE, sep=",", row.names=FALSE, quote = FALSE)
     print(paste(i-1,"Test Done!"))
     
-    ################
+    #########################
+    ## Working on train files
+    #########################
+    
     mypath <- paste(train_folder,mytrainfiles[1],sep="")
     mytraindata<-read.csv(mypath)
     mydata <- matrix(nrow=nrow(mytraindata),ncol=length(mytrainfiles)+1)
@@ -90,25 +89,15 @@ run_analysis <- function(directory) {
       
       print(dim(mytraindata))
       
-      ##mynames <- c(mynames,substring(mytestfile, 1,nchar(mytestfile)-4))
-      
       mydata[,i] <- mytraindata[,1]
       
       
       i<-i+1
-      ##if (i==2) break
     }
     
-    ##print(mynames)
-    ##print(dim(mydata))
     
     mydata[,ncol(mydata)]<-rep("train",nrow(mydata))  
     
-    ##colnames(mydata)<-mynames
-    
-    ##print(colnames(mydata))
-    
-    ##outputtest <- paste(directory,"/data_bind.csv",sep="")  
     write.table(mydata,outputtest,append=TRUE, sep=",", col.names = FALSE,row.names=FALSE, quote = FALSE)
     print(paste(i-1,"Train Done!"))
     
