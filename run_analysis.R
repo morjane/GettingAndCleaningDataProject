@@ -1,3 +1,6 @@
+## run_calc is a function that extracts only the measurements on the mean and standard deviation for each measurement,
+## from the file that is merged using the run_analysis function.
+## This function must be called after the run_analysis function
 run_calc <- function(directory) {
   if (file.exists(directory)){  
     mypath <- paste(directory,"/data_bind.txt",sep="") 
@@ -18,7 +21,8 @@ run_calc <- function(directory) {
   else return("Directory Not Found")  
 }
 
-
+## run_analysis is a function that merges the training and the test sets to create one data set.
+## This data set is wrote in the data_bind.txt file 
 run_analysis <- function(directory=getwd()) {
   ## 'directory' is a character vector of length 1 indicating
   ## the location of the Samsung data files
